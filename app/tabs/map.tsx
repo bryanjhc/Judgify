@@ -559,19 +559,19 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     circularButton: {
-        position: 'absolute',
-        bottom: 100,
-        right: 5,
-        width: 50,
-        height: 50,
-        borderRadius: 25, // Half of the width/height for a perfect circle
-        backgroundColor: '#D2B48C', // Background color
-        alignItems: 'center', // Center icon horizontally
-        justifyContent: 'center', // Center icon vertically
-        elevation: 5, // Shadow for Android
-        shadowColor: '#000', // Shadow color for iOS
-        shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
-        shadowOpacity: 0.3, // Shadow opacity for iOS
-        shadowRadius: 3, // Shadow radius for iOS
+      position: 'absolute',
+      bottom: 100,
+      right: 5,
+      width: 50,
+      height: 50,
+      borderRadius: 25, // Half of the width/height for a perfect circle
+      backgroundColor: '#D2B48C', // Background color
+      alignItems: 'center', // Center icon horizontally
+      justifyContent: 'center', // Center icon vertically
+      elevation: 5, // Shadow for Android
+      shadowColor: '#000', // Shadow color for iOS
+      shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
+      shadowOpacity: 0.3, // Shadow opacity for iOS
+      shadowRadius: 3, // Shadow radius for iOS
     },
 });

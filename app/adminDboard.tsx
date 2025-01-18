@@ -4,12 +4,16 @@ import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateD
 import { db } from'../db/firebaseConfig';
 import { Card } from '@rneui/themed';
 import { EventData } from '../constants/interfaces';
-import { Button, useTheme, Modal, VStack, HStack } from 'native-base';
+import { Button, useTheme, Modal, VStack, HStack, Input } from 'native-base';
+import { Icon } from 'react-native-elements';
+import InputScrollView from 'react-native-input-scroll-view';
+import { useRouter } from 'expo-router';
 
 export default function AdminDashboard() {
 
   // Constants
   const theme = useTheme();
+  const router = useRouter();
   const [events, setEvents] = useState<any[]>([]);
   const [newEvent, setNewEvent] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,7 +25,7 @@ export default function AdminDashboard() {
   async function fetchEvents(): Promise<any> {
     try {
       const eventsRef = collection(db, "events");
-      const eventsQuery = query(eventsRef, orderBy("dateOfEvent"));
+      const eventsQuery = query(eventsRef, orderBy("dateOfEvent", "desc"));
       const eventsSnapshot = await getDocs(eventsQuery);
       const eventsList: any[] = [];
       eventsSnapshot.forEach((doc) => {
@@ -182,57 +186,76 @@ export default function AdminDashboard() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Admin Dashboard</Text>
+      <View style={styles.welcomeContainer}>
+        <Text style={styles.title}>Welcome to Admin Dashboard</Text>
+      </View>
       <Card>
         <Card.Title>Schedule</Card.Title>
         <Card.Divider />
-        {/* Map here */}
-        {events.map((oneEvent) => (
-          <Card containerStyle={styles.cardContainer} key={oneEvent.id}>
-            <Text style={styles.eventTitle}>{oneEvent.name}</Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Date:</Text> {oneEvent.dateOfEvent}
-            </Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Location:</Text> {oneEvent.location}
-            </Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Organizer:</Text> {oneEvent.organizer}
-            </Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Participants:</Text> {oneEvent.numOfParticipants}
-            </Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Teams:</Text> {oneEvent.numOfTeams}
-            </Text>
-            <Text style={styles.eventDetails}>
-              <Text style={styles.boldText}>Description:</Text> {oneEvent.description}
-            </Text>
-            <Text
-              style={styles.eventLink}
-              onPress={() => Linking.openURL(oneEvent.eventURL)}
-            >
-              Visit Event Page
-            </Text>
-            <Button
-              bg= "emerald.400"
-              _pressed= {{ bg: "emerald.300" }}
-              width= "100%"
-              _text={{
-                fontWeight: "bold",
-              }}
-              onPress= {() => {
-                console.log("Start event");
-                setStartEvent(oneEvent);
-                setModalVisible(true);
-              }}
-              isDisabled={buttonFlag}
-            >
-              Start
-            </Button>
-          </Card>
-        ))}
+          <View style={styles.scrollContainer}>
+            <InputScrollView>
+            {/* Map here */}
+            {events.map((oneEvent) => (
+              <Card containerStyle={styles.cardContainer} key={oneEvent.id}>
+                <Text style={styles.eventTitle}>{oneEvent.name}</Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Date:</Text> {oneEvent.dateOfEvent}
+                </Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Location:</Text> {oneEvent.location}
+                </Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Organizer:</Text> {oneEvent.organizer}
+                </Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Participants:</Text> {oneEvent.numOfParticipants}
+                </Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Teams:</Text> {oneEvent.numOfTeams}
+                </Text>
+                <Text style={styles.eventDetails}>
+                  <Text style={styles.boldText}>Description:</Text> {oneEvent.description}
+                </Text>
+                <Text
+                  style={styles.eventLink}
+                  onPress={() => Linking.openURL(oneEvent.eventURL)}
+                >
+                  Visit Event Page
+                </Text>
+                <Button
+                  bg= "emerald.400"
+                  _pressed= {{ bg: "emerald.300" }}
+                  width= "100%"
+                  _text={{
+                    fontWeight: "bold",
+                  }}
+                  onPress= {() => {
+                    console.log("Start event");
+                    setStartEvent(oneEvent);
+                    setModalVisible(true);
+                  }}
+                  isDisabled={buttonFlag}
+                >
+                  Start
+                </Button>
+              </Card>
+            ))}
+          </InputScrollView>
+        </View>
       </Card>
+      <View style={styles.addContainer}>
+        <TouchableOpacity
+            style={styles.circularButton}
+            onPress={() => {
+              console.log("Admin wants to add a new event");
+              router.push('/submitNewEvent');
+            }}
+          >
+            <Icon
+              name="add"
+            />
+          </TouchableOpacity>
+      </View>
       <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
@@ -269,6 +292,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
+  welcomeContainer: {
+    marginTop: 40
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -300,6 +326,29 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 8,
     width: "100%",
+  },
+  circularButton: {
+    // position: 'absolute',
+    // right: 5,
+    width: 50,
+    height: 50,
+    borderRadius: 25, // Half of the width/height for a perfect circle
+    backgroundColor: 'orange', // Background color
+    // alignItems: 'center', // Center icon horizontally
+    justifyContent: 'center', // Center icon vertically
+    elevation: 5, // Shadow for Android
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
+    shadowOpacity: 0.3, // Shadow opacity for iOS
+    shadowRadius: 3, // Shadow radius for iOS
+  },
+  addContainer: {
+    justifyContent:'center',
+    marginTop: 15
+  },
+  scrollContainer: {
+    flex: 1,
+    maxHeight: 500, // Constrain scrollable area
   },
 });
 
