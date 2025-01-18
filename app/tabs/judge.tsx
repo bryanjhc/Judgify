@@ -1,6 +1,6 @@
-import { Item } from 'firebase/analytics';
+// import { Item } from 'firebase/analytics';
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity, Linking, Modal, Button, Pressable, Alert } from 'react-native';
 
 
 
@@ -145,12 +145,25 @@ const groupData = [
 const PropertyList = () => {
   const [searchText, setSearchText] = useState('');
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const [selectedItem, setSelectedItem] = useState<typeof groupData[0] | null>(null);
+  const [selectedPicture, setSelectedPicture] = useState<any>(require("@/assets/images/EcoTrack.webp"));
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
 const handleSearch = (text: string) => {
     setSearchText(text);
 }
 
   const renderItem = ({ item }: { item: typeof groupData[0] }) => (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={() => {
+      setSelectedPicture(item.picture);
+      setSelectedItem(item);
+      toggleModal();
+    }}>
       <Image source={item.picture} style={styles.image} />
       <View style={styles.cardBody}>
         <Text style={styles.projectName}>{item.projectName}</Text>
@@ -189,11 +202,81 @@ const handleSearch = (text: string) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            toggleModal();
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {selectedItem && 
+              (<View style={{alignContent : "center"}}>
+                <Image source={selectedPicture} style={{width : 280 , height : "40%"}}/>
+              <Text style={styles.projectName}>{selectedItem.projectName}</Text>
+              {selectedItem.members.map((member, index) => (
+              <Text key={index} style={styles.indivNames} onPress={() => Linking.openURL(selectedItem.linkedinLinks[index])}>
+                  {member}
+              </Text>))}
+              <Text style={styles.description}>{selectedItem.projectDescription}</Text>
+              </View>
+              )}
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={toggleModal}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     paddingTop:60,
