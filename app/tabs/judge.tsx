@@ -151,9 +151,9 @@ const PropertyList = () => {
   const [selectedItem, setSelectedItem] = useState<typeof groupData[0] | null>(null);
   const [selectedPicture, setSelectedPicture] = useState<any>(require("@/assets/images/EcoTrack.webp"));
 
-  const [funRating, setFunRating] = useState(0);
-  const [impactRating, setImpactRating] = useState(0);
-  const [techRating, setTechRating] = useState(0);
+  const [funRating, setFunRating] = useState(2.5);
+  const [impactRating, setImpactRating] = useState(2.5);
+  const [techRating, setTechRating] = useState(2.5);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -226,26 +226,35 @@ const handleSearch = (text: string) => {
               <Text style={styles.indivNames}>Fun</Text>
               <Rating
                 type='star'
-                ratingCount={10}
+                ratingCount={5}
                 imageSize={30}
                 style={{ paddingVertical: 10 }}
                 onFinishRating={setFunRating}
+                startingValue={funRating}
+                fractions={1}
+                jumpValue={0.5}
               />
               <Text style={styles.indivNames}>Impactful and Innovative</Text>
               <Rating
                 type='heart'              
-                ratingCount={10}
+                ratingCount={5}
                 imageSize={30}
                 style={{ paddingVertical: 10 }}
                 onFinishRating={setImpactRating}
+                startingValue={impactRating}
+                fractions={1}
+                jumpValue={0.5}
               />
               <Text style={styles.indivNames}>Technologically Impressive</Text>
               <Rating
                 type='rocket'              
-                ratingCount={10}
+                ratingCount={5}
                 imageSize={30}
                 style={{ paddingVertical: 10 }}
                 onFinishRating={setTechRating}
+                startingValue={techRating}
+                fractions={1}
+                jumpValue={0.5}
               />
               </View>
               )}
