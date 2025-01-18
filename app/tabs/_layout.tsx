@@ -40,7 +40,7 @@ export default function TabLayout() {
         name="judge"
         options={{
           title: 'Judge',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="assignment.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="checklist" color={color} />,
         }}
       />
       <Tabs.Screen

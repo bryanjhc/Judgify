@@ -13,7 +13,7 @@ const MAPPING = {
   'person.fill': 'person',
   'map.fill': 'map',
   'timer.circle.fill' : 'timer',
-  'assignment.fill' : 'assignment',
+  'checklist': 'checklist',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'locationSearch': 'location-searching',
