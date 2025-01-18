@@ -110,11 +110,11 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Hey There!</ThemedText>
+        <ThemedText type="title">Hey There</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Welcome to NUSuperJudges!</ThemedText>
+        <ThemedText type="subtitle">Welcome to Judgify!</ThemedText>
       </ThemedView>
       
 
