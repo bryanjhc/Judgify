@@ -31,7 +31,7 @@ export default function adminLogin() {
   function login() {
     console.log("trying to login...")
     if (email == "Admin@gmail.com" && password == "admin") {
-        //router.push("/adminDboard");
+        router.push("/adminDboard");
     } else {
         alert("Invalid email or password");
     }
