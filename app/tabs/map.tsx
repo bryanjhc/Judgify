@@ -4,6 +4,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Button, Container } from 'native-base';
 import { db } from '../../db/firebaseConfig';
 import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, writeBatch, orderBy } from "firebase/firestore"; // Firestore functions
@@ -15,6 +16,8 @@ import Svg, { Path } from 'react-native-svg';
 export default function HomeScreen() {
 
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const id = params.id;
 
   const [teams, setTeams] = useState<any[]>([]);
   const [assignedTableIds, setAssignedTableIds] = useState<string[]>([]);
@@ -32,8 +35,21 @@ export default function HomeScreen() {
       const fetchAllTeams = async () => {
           const fetchedTeams = await fetchTeamsFromHacknRoll();
           setTeams(fetchedTeams);
+          fetchTables();
           // For example, we can assign some tables to teams
-          setAssignedTableIds(["2", "7", "12"]); // For example, these docIds are "assigned"
+          // setAssignedTableIds([]); // Gotta change this to pulling from backend
+      };
+      const fetchTables = async () => {
+        if (id) {
+          console.log("Passed ID from userLogin.tsx: ",id);
+          const fetchedTables = await fetchAssignedTables(id);
+          if (fetchedTables) {
+            console.log(fetchedTables.teams);
+            setAssignedTableIds(fetchedTables.teams);
+          }
+        } else {
+          console.warn("ID is null, cannot fetch assigned tables.");
+        }
       };
       fetchAllTeams();
   }, []);
@@ -62,6 +78,27 @@ export default function HomeScreen() {
       }
   }
 
+
+  async function fetchAssignedTables(id: string) {
+    try {
+      const docRef = doc(db, "judgeHack&Roll25", id); // Reference the specific document
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data?.teams && Array.isArray(data.teams)) {
+          data.teams = data.teams.map((num) => String(num));
+        }
+        console.log("Fetched assigned tables:", data);
+        return data; // Return the entire document data
+      } else {
+        console.warn("No document found for the given ID.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching assigned tables:", error);
+      return null;
+    }
+  }
 
   //Insert fake info
   // const entries = [
