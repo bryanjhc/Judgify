@@ -1637,72 +1637,72 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  diningHallContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  stageContainer: {
-    flex: 2,
-  },
-  stage: {
-    flexDirection: 'row',
-    backgroundColor: '#D2B48C',
-    height: '30%',
-    alignItems: 'center',
-    borderRadius: 5,
-    justifyContent: 'center',
-  },
-  /* The parent container for all the rows */
-  allTablesContainer: {
-    flex: 8,
-    justifyContent: 'space-around',
-    flexDirection: 'column',
-    marginTop: '30%',
-    marginBottom: '40%',
-  //   marginHorizontal: '1%',
-  },
-  /* Each row: horizontally arranged */
-  tableRowContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  //   marginVertical: 2,
-  },
-  table: {
-    height: '100%',
-    width: '15%',            // was 20%
-    backgroundColor: '#654321',
-    borderRadius: 5,
-  //   margin: 3,               // was 5
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  aisle: {
-    height: '100%',
-    width: '15%',            // was 20%
-  //   margin: 3,               // was 5
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-  },
-  assignedTable: {
-    height: '100%',
-    width: '15%',            // was 20%
-    backgroundColor: 'red',
-    borderRadius: 5,
-  //   margin: 3,               // was 5
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  circularButton: {
+    backgroundImage: {
+      flex: 1,
+      resizeMode: 'cover',
+    },
+    diningHallContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    stageContainer: {
+      flex: 2,
+    },
+    stage: {
+      flexDirection: 'row',
+      backgroundColor: '#D2B48C',
+      height: '30%',
+      alignItems: 'center',
+      borderRadius: 5,
+      justifyContent: 'center',
+    },
+    /* The parent container for all the rows */
+    allTablesContainer: {
+      flex: 8,
+      justifyContent: 'space-around',
+      flexDirection: 'column',
+      marginTop: '30%',
+      marginBottom: '40%',
+    //   marginHorizontal: '1%',
+    },
+    /* Each row: horizontally arranged */
+    tableRowContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+    //   marginVertical: 2,
+    },
+    table: {
+      height: '100%',
+      width: '15%',            // was 20%
+      backgroundColor: '#654321',
+      borderRadius: 5,
+    //   margin: 3,               // was 5
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    aisle: {
+      height: '100%',
+      width: '15%',            // was 20%
+    //   margin: 3,               // was 5
+      alignItems: 'center',
+      flexDirection: 'row',
+      backgroundColor: 'transparent',
+      justifyContent: 'center',
+    },
+    assignedTable: {
+      height: '100%',
+      width: '15%',            // was 20%
+      backgroundColor: 'red',
+      borderRadius: 5,
+    //   margin: 3,               // was 5
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    circularButton: {
       position: 'absolute',
       bottom: 100,
       right: 5,
@@ -1717,5 +1717,5 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
       shadowOpacity: 0.3, // Shadow opacity for iOS
       shadowRadius: 3, // Shadow radius for iOS
-  },
+    },
 });
