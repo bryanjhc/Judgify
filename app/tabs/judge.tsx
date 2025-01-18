@@ -1,5 +1,6 @@
 // import { Item } from 'firebase/analytics';
 import React, { useState } from 'react';
+import { Rating } from 'react-native-ratings';
 import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity, Linking, Modal, Button, Pressable, Alert } from 'react-native';
 
 
@@ -150,6 +151,10 @@ const PropertyList = () => {
   const [selectedItem, setSelectedItem] = useState<typeof groupData[0] | null>(null);
   const [selectedPicture, setSelectedPicture] = useState<any>(require("@/assets/images/EcoTrack.webp"));
 
+  const [funRating, setFunRating] = useState(0);
+  const [impactRating, setImpactRating] = useState(0);
+  const [techRating, setTechRating] = useState(0);
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -208,27 +213,62 @@ const handleSearch = (text: string) => {
           transparent={true}
           visible={isModalVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
             toggleModal();
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {selectedItem && 
               (<View style={{alignContent : "center"}}>
-                <Image source={selectedPicture} style={{width : 280 , height : "40%"}}/>
-              <Text style={styles.projectName}>{selectedItem.projectName}</Text>
-              {selectedItem.members.map((member, index) => (
-              <Text key={index} style={styles.indivNames} onPress={() => Linking.openURL(selectedItem.linkedinLinks[index])}>
-                  {member}
-              </Text>))}
+                <Text style={styles.projectName}>{selectedItem.projectName}</Text>
+                <Image source={selectedPicture} style={{width : 280 , height : "25%"}}/>
               <Text style={styles.description}>{selectedItem.projectDescription}</Text>
+              <Text style={styles.ratingHeader}>Ratings</Text>
+              <Text style={styles.indivNames}>Fun</Text>
+              <Rating
+                type='star'
+                ratingCount={10}
+                imageSize={30}
+                style={{ paddingVertical: 10 }}
+                onFinishRating={setFunRating}
+              />
+              <Text style={styles.indivNames}>Impactful and Innovative</Text>
+              <Rating
+                type='heart'              
+                ratingCount={10}
+                imageSize={30}
+                style={{ paddingVertical: 10 }}
+                onFinishRating={setImpactRating}
+              />
+              <Text style={styles.indivNames}>Technologically Impressive</Text>
+              <Rating
+                type='rocket'              
+                ratingCount={10}
+                imageSize={30}
+                style={{ paddingVertical: 10 }}
+                onFinishRating={setTechRating}
+              />
               </View>
               )}
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={toggleModal}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+              <View style = {{flexDirection : "row"}}>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={toggleModal}>
+                  <Text style={styles.textStyle}>Close</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => {
+                    console.log('Fun Rating: ', funRating);
+                    console.log('Impact Rating: ', impactRating);
+                    console.log('Tech Rating: ', techRating);
+                    toggleModal();
+                    Alert.alert('Ratings Submitted', 'Your ratings have been submitted successfully!', [
+                      { text: 'OK' }
+                    ]);
+                  }}>
+                  <Text style={styles.textStyle}>Submit</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </Modal>
@@ -261,6 +301,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    marginHorizontal: 10,
+    width: 100,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
@@ -322,6 +364,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   projectName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5
+  },
+  ratingHeader: {
+    marginTop: 15,
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5
