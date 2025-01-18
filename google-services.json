@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189927513883",
+    "project_id": "expo-nusmartjudging",
+    "storage_bucket": "expo-nusmartjudging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189927513883:android:7536995773bafb148e7dbe",
+        "android_client_info": {
+          "package_name": "com.wa2goose.nusjudge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDlpdqQvn6P00kuFEahzFRVqpoTg7A6z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
