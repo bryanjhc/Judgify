@@ -40,14 +40,14 @@ export default function TabLayout() {
         name="judge"
         options={{
           title: 'Judge',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="assignment.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="assignment" color={color} />,
         }}
       />
       <Tabs.Screen
         name="timer"
         options={{
           title: 'Timer',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="timer.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="timer.circle.fill" color={color} />,
         }}
       />
       <Tabs.Screen
