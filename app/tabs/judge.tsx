@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Rating } from 'react-native-ratings';
 import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity, Linking, Modal, Button, Pressable, Alert } from 'react-native';
+import { notificationAsync } from 'expo-haptics';
 
 
 
@@ -183,6 +184,10 @@ const handleSearch = (text: string) => {
         <Text style={styles.beds}>{item.projectPrizeCategory}</Text>
         <Text style={styles.baths} onPress={() => Linking.openURL(item.repoLink)}>{item.repoLink}</Text>
         <Text style={styles.parking} onPress={() => Linking.openURL(item.devpostLink)}>{item.devpostLink}</Text>
+      </View>
+      <View style={styles.cardFooter}>
+        <Text style={styles.notesHeader}>Take Notes:</Text>
+        <TextInput style={styles.notes} multiline/>
       </View>
     </TouchableOpacity>
   );
@@ -412,6 +417,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color:'#ffa500',
     fontWeight: 'bold'
+  },
+  notesHeader: {
+    fontSize: 20,
+    marginBottom: 5
+  },
+  notes: {
+    height: 100,
+    borderWidth: 1,
+    borderColor:'#dcdcdc',
+    backgroundColor:'#fff',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
   }
 });
 
