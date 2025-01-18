@@ -1,6 +1,5 @@
 import { useRouter } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,38 +9,53 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-// import auth from '@react-native-firebase/auth';
+import { db } from '../db/firebaseConfig';
+import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, writeBatch, orderBy } from "firebase/firestore"; // Firestore functions
+import React, { useEffect, useState, useMemo } from 'react';
+
 
 export default function userLogin() {
   const router = useRouter();
   const [id , setId] = useState("");
+  const [availableIds, setAvailableIds] = useState<string[]>([]);
 
-    // const login = async () => {
-    //     console.log("trying to login...")
-    //     try {
-    //     const user = await auth().signInWithEmailAndPassword(email, password);
-    //     console.log(user);
-    //     router.push("/tabs");
-    //     } catch (error) {
-    //     console.log(error);
-    //     }
-    // };
+  async function fetchAllDocumentIds(collectionName: string, setAvailableIds: (ids: string[]) => void) {
+    try {
+      const collectionRef = collection(db, collectionName);
+      const querySnapshot = await getDocs(collectionRef);
 
-    function login() {
-        console.log("trying to login...")
-        if (id == "123456") {
-            router.push("/tabs");
-        }
-        else {
-            alert("Invalid ID");
-        }
+      // Map over all documents to extract their IDs
+      const documentIds = querySnapshot.docs.map((doc) => doc.id);
+      console.log("Fetched document IDs:", documentIds);
+      setAvailableIds(documentIds);
+    } catch (error) {
+      console.error("Error fetching document IDs:", error);
     }
+  }
 
-    function forgotId() {
-        alert("Please contact the admin at +65 81234567 for your ID")
-    }
+  useEffect(() => {
+    fetchAllDocumentIds("judgeHack&Roll25", setAvailableIds);
+  }, []);
 
-  
+  function login() {
+      console.log("trying to login...")
+      if (availableIds.includes(id)) {
+        console.log('Navigating with ID:', id);
+        router.push({
+          pathname: '/tabs/map',
+          params: { id },
+        });
+      }
+      else {
+        alert("Invalid ID");
+      }
+  }
+
+  function forgotId() {
+    alert("Please contact the admin at +65 81234567 for your ID")
+  }
+
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("@/assets/images/JudgeIconBG.png")} /> 
