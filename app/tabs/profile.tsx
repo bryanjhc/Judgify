@@ -45,12 +45,12 @@ const ProfileScreen = () => {
           <Text style={styles.infoValue}>Male</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Joined</Text>
-          <Text style={styles.infoValue}>Jan 18, 2025</Text>
+          <Text style={styles.infoLabel}>Role</Text>
+          <Text style={styles.infoValue}>Intern Wannabe</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Location</Text>
-          <Text style={styles.infoValue}>UTown, Singapore</Text>
+          <Text style={styles.infoLabel}>Email</Text>
+          <Text style={styles.infoValue}>randomemail@gmail.com</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Reviews</Text>
