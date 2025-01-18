@@ -1,6 +1,6 @@
 // This should be the VIEW of the location
 
-import { View, Text, Image, StyleSheet, Platform, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, Platform, FlatList, ScrollView } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -16,21 +16,24 @@ export default function HomeScreen() {
         startTime: '07:30',
         endTime: '09:00',
         title: 'Breakfast',
-        bgColor:'#E0FFFF',
+        bgColor:'#ddd',
+        now: false,
         picture: require('@/assets/images/breakfast.jpg')
       },
       {
         startTime: '11:30',
         endTime: '12:30',
         title: 'Lunch',
-        bgColor:'#E6E6FA',
+        bgColor:'#ddd',
+        now: false,
         picture: require('@/assets/images/lunch.jpg')
       },
       {
         startTime: '12:30',
         endTime: '12.45',
         title: 'Hacking Ends',
-        bgColor:'#FAF0E6',
+        bgColor:'#ddd',
+        now: false,
         picture: require('@/assets/images/finish.jpg')
       },
       {
@@ -38,6 +41,7 @@ export default function HomeScreen() {
         endTime: '15:00',
         title: 'Project Fair & Judging',
         bgColor:'#FAFAD2',
+        now: true,
         picture: require('@/assets/images/pitch.jpg')
       },
       {
@@ -45,12 +49,14 @@ export default function HomeScreen() {
         endTime: '16:00',
         title: 'Closing Ceremony',
         bgColor:'#E0FFFF',
+        now: false,
         picture: require('@/assets/images/closing ceremony.avif')
       },{
         startTime: '16:00',
         endTime: '',
         title: 'End of Hack&Roll 2025!',
         bgColor:'#E6E6FA',
+        now: false,
         picture: require('@/assets/images/goodbye.jpg')
       },
       // Add more classes as needed
@@ -69,6 +75,7 @@ export default function HomeScreen() {
           </View>
   
           <View style={[styles.card,{backgroundColor:item.bgColor}]}>
+            {item.now && <Text style={styles.cardNow}>HAPPENING NOW</Text>}
             <Text style={styles.cardTitle}>{item.title}</Text>
             <Image source = {item.picture} style={styles.picture} />
           </View>
@@ -113,13 +120,14 @@ export default function HomeScreen() {
 
       <Text style={styles.title}>Event Schedule</Text>
 
-      <FlatList
-      contentContainerStyle={{paddingHorizontal:16}}
-        data={classes}
-        ListHeaderComponent={renderHeader}
-        renderItem={renderClassItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      {renderHeader()}
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
+        {classes.map((item, index) => (
+        <View key={index} style={styles.classItem}>
+          {renderClassItem({ item })}
+        </View>
+        ))}
+      </ScrollView>
     </ParallaxScrollView>
   );
 }
@@ -244,6 +252,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#00008B',
     marginBottom: 4,
+  },
+  cardNow: {
+    fontSize: 20,
+    color: 'red',
+    marginBottom: 4,
+    fontWeight: 'bold',
   },
   cardDate: {
     fontSize: 12,

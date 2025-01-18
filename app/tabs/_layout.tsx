@@ -37,6 +37,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="judge"
+        options={{
+          title: 'Judge',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="assignment.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="timer"
+        options={{
+          title: 'Timer',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="timer.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'profile',
