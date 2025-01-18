@@ -395,6 +395,7 @@ export default function HomeScreen() {
                 <Container style={styles.stageContainer}>
                 <TouchableOpacity
                     style={styles.stage}
+                    onPress={() => router.push('/tabs')}
                 >
                     <ThemedText type="defaultSemiBold">Stage</ThemedText>
                 </TouchableOpacity>
