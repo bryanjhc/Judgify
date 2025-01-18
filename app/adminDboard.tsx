@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, orderBy } from "firebase/firestore"; // Firestore functions
+import { Alert, View, Text, StyleSheet, TouchableOpacity, Linking, TextInput } from 'react-native';
+import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, orderBy, writeBatch } from "firebase/firestore"; // Firestore functions
 import { db } from'../db/firebaseConfig';
 import { Card } from '@rneui/themed';
 import { EventData } from '../constants/interfaces';
-import { Button, useTheme } from 'native-base';
+import { Button, useTheme, Modal, VStack, HStack } from 'native-base';
 
 export default function AdminDashboard() {
 
@@ -12,6 +12,10 @@ export default function AdminDashboard() {
   const theme = useTheme();
   const [events, setEvents] = useState<any[]>([]);
   const [newEvent, setNewEvent] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [numberOfJudges, setNumberOfJudges] = useState("");
+  const [startEvent, setStartEvent] = useState<any>(null);
+  const [buttonFlag, setbuttonFlag] = useState(false);
 
   // Create a pull function for events
   async function fetchEvents(): Promise<any> {
@@ -31,12 +35,35 @@ export default function AdminDashboard() {
     }
   };
 
+  async function pushJudgeInfo(teamAllocations: Record<string, number[]>): Promise<any> {
+    const batch = writeBatch(db);
+    const collectionPath = "judge" + startEvent.name;
+
+    for (const judge in teamAllocations) {
+      const judgeData = {
+        uuid: judge,
+        teams: teamAllocations[judge],
+        event: startEvent.name,
+        eventId: startEvent.id,
+        company: "Grab",
+        role: "Senior Software Engineer",
+        email: "hihi@gmail.com"
+      };
+      const docRef = doc(db, collectionPath, judge);
+      batch.set(docRef, judgeData);
+    }
+    await batch.commit();
+    console.log("Batch write completed successfully.");
+  };
+
   useEffect(() => {
     const loadEvent = async () => {
       const fetchedEvents = await fetchEvents();
       setEvents(fetchedEvents);
     };
     loadEvent();
+    console.log("StartEvent", startEvent);
+    console.log("Number of Judges", numberOfJudges);
   }, [newEvent]);
 
   // const eventData = {
@@ -79,7 +106,79 @@ export default function AdminDashboard() {
     }
   }
 
-  // onPress={() => createEventWithNameAsID("HacknRoll25", eventData)}
+  // UUID generator
+  const generateJudgeUUIDs = (count: number): string[] => {
+    const uuids = [];
+    for (let i = 0; i < count; i++) {
+      const uuid = Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit number
+      uuids.push(uuid);
+    }
+    return uuids;
+  };
+
+  // Shuffle array function
+  const shuffleArray = (array: number[]): number[] => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const allocateTeams = (judges: string[], teams: number[], teamsPerJudge: number) => {
+    const allocations: Record<string, number[]> = {};
+    let teamIndex = 0;
+
+    judges.forEach((judge) => {
+      allocations[judge] = teams.slice(teamIndex, teamIndex + teamsPerJudge);
+      teamIndex += teamsPerJudge;
+    });
+    console.log("Team allocations:", allocations);
+    return allocations;
+  };
+
+  async function updateEventStatus(status: string) {
+    try {
+      const eventRef = doc(db, "events", "HacknRoll25");
+      await updateDoc(eventRef, {
+        eventStatus: status,
+      });
+      console.log(`Event status updated to "${status}"`);
+    } catch (error) {
+      console.error("Error updating event status:", error);
+      // Alert.alert("Error", "Failed to update event status.");
+    }
+  }
+
+  // Once I press start -> prompt for user to enter number of judges.
+  const handleStartEvent = () => {
+    if (isNaN(Number(numberOfJudges)) || Number(numberOfJudges) <= 0) {
+      Alert.alert("Invalid Input", "Please enter a valid number greater than 0.");
+    } else {
+      setModalVisible(false);
+      console.log(`Event started with ${numberOfJudges} judges.`);
+      // Start the database push here
+      console.log("Start event", startEvent);
+      // take the number of teams from startEvent, and divide it by the number of judges
+      // Randomly assign judges to teams
+      // Push these results to the database
+      const judgeUUIDs = generateJudgeUUIDs(Number(numberOfJudges));
+      const teamsPerJudge = Math.ceil(startEvent.numOfTeams / judgeUUIDs.length);
+      const shuffledTeams = shuffleArray([...Array(startEvent.numOfTeams).keys()]);
+      const teamAllocations = allocateTeams(judgeUUIDs, shuffledTeams, teamsPerJudge);
+      console.log(teamAllocations);
+      pushJudgeInfo(teamAllocations)
+        .then(() => console.log("Pushed to firestore"))
+        .catch((error) => {
+          console.error("Error pushing to Firestore:", error);
+          Alert.alert("Error", "An error occurred while pushing data.");
+        }
+      );
+
+      setbuttonFlag(true);
+      updateEventStatus("started");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -122,13 +221,43 @@ export default function AdminDashboard() {
               _text={{
                 fontWeight: "bold",
               }}
-              onPress= {() => console.log("Start event")}
+              onPress= {() => {
+                console.log("Start event");
+                setStartEvent(oneEvent);
+                setModalVisible(true);
+              }}
+              isDisabled={buttonFlag}
             >
               Start
             </Button>
           </Card>
         ))}
       </Card>
+      <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Enter Number of Judges</Modal.Header>
+          <Modal.Body>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Enter a number"
+              value={numberOfJudges}
+              onChangeText={setNumberOfJudges}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <HStack space={3}>
+              <Button colorScheme="green" onPress={handleStartEvent}>
+                OK
+              </Button>
+              <Button colorScheme="red" onPress={() => setModalVisible(false)}>
+                Back
+              </Button>
+            </HStack>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </View>
   );
 }
@@ -163,6 +292,14 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: "bold",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    marginVertical: 8,
+    width: "100%",
   },
 });
 
