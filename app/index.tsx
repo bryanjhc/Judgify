@@ -83,7 +83,7 @@ export default function SelectionScreen() {
                       size="lg"
                       width="200"
                       rounded="full"
-                      //onPress
+                      onPress={() => router.push('/userLogin')}
                     >
                       User
                     </Button>
@@ -98,7 +98,7 @@ export default function SelectionScreen() {
                       size="lg"
                       width="200"
                       rounded="full"
-                      //onPress
+                      onPress={() => router.push('/adminLogin')}
                     >
                       Admin
                     </Button>
