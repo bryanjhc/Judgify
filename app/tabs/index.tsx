@@ -86,8 +86,10 @@ export default function HomeScreen() {
     const renderHeader = () => (
       <View style={styles.card}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Hack&Roll 2025</Text>
-          <Text style={styles.headerSubtitle}>19 Jan, 7:30am - 4:00pm</Text>
+          <Text style={styles.headerTitle}>ANNOUNCEMENT</Text>
+          <Text style={styles.headerSubtitle}>19 Jan, 12:45pm</Text>
+          <Text style={styles.headerText}>Judging has STARTED! Judges may take a look at the Judge tab
+            to see your Assigned teams and the Map tab to see their locations.</Text>
         </View>
   
         <View style={styles.body}>
@@ -174,6 +176,11 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  headerText: {
+    marginTop: 8,
+    color:'#ffffff',
+    fontSize: 18,
   },
   headerSubtitle: {
     fontSize: 12,
@@ -275,4 +282,4 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#fff'
   },
-});
+}); 

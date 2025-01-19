@@ -80,6 +80,7 @@ export default function SelectionScreen() {
                         fontWeight: "bold",
                         color: "white",
                       }}
+                      style={{backgroundColor: '#ff7f50'}}
                       size="lg"
                       width="200"
                       rounded="full"
@@ -95,6 +96,7 @@ export default function SelectionScreen() {
                         fontWeight: "bold",
                         color: "white",
                       }}
+                      style={{backgroundColor: '#ff7f50'}}
                       size="lg"
                       width="200"
                       rounded="full"
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     textAlign: 'center',
     gap: 8,
-    backgroundColor: '#e6f7ff',
+    backgroundColor: '#ffaf80',
   },
   titleFont: {
     fontSize: 24,
