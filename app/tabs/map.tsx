@@ -1621,7 +1621,7 @@ export default function HomeScreen() {
                                   if (cell.team) {
                                   Alert.alert(
                                       `Team #${cell.team.docId}`,
-                                      `Name: ${cell.team.teamName}\nFocus: ${cell.team.focus}\nVotes: ${cell.team.votes}`
+                                      `Name: ${cell.team.teamName}\nFocus: ${cell.team.focus}\n Info: ${cell.team.projectDescription}`,
                                   );
                                   }
                               }}
