@@ -256,6 +256,16 @@ export default function AdminDashboard() {
             />
           </TouchableOpacity>
       </View>
+      <View style={styles.backContainer}>
+        <Button
+          onPress={() => {
+            console.log("Admin wants to go back to the main page");
+            router.push('/');
+          }}
+        >
+          Home
+        </Button>
+      </View>
       <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
@@ -349,6 +359,10 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     maxHeight: 500, // Constrain scrollable area
+  },
+  backContainer: {
+    justifyContent:'center',
+    marginTop: 15
   },
 });
 
