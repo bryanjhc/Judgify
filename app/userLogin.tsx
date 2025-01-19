@@ -12,12 +12,13 @@ import {
 import { db } from '../db/firebaseConfig';
 import { collection, addDoc, doc, setDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, writeBatch, orderBy } from "firebase/firestore"; // Firestore functions
 import React, { useEffect, useState, useMemo } from 'react';
-
+import { useGlobalState } from '@/GlobalState';
 
 export default function userLogin() {
   const router = useRouter();
   const [id , setId] = useState("");
   const [availableIds, setAvailableIds] = useState<string[]>([]);
+  const { setGlobalId } = useGlobalState();
 
   async function fetchAllDocumentIds(collectionName: string, setAvailableIds: (ids: string[]) => void) {
     try {
@@ -41,6 +42,7 @@ export default function userLogin() {
       console.log("trying to login...")
       if (availableIds.includes(id)) {
         console.log('Navigating with ID:', id);
+        setGlobalId(id);
         router.push({
           pathname: '/tabs/map',
           params: { id },

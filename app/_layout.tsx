@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import customTheme from '@/constants/customTheme';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { GlobalStateProvider } from '@/GlobalState';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,17 +30,19 @@ export default function RootLayout() {
   }
 
   return (
-    <NativeBaseProvider theme={customTheme}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="adminDboard" options={{ headerShown: false }} />
-          <Stack.Screen name="tabs" options={{ headerShown: false }} />
-          <Stack.Screen name="userLogin" options={{ headerShown: false }} />
-          <Stack.Screen name="adminLogin" options={{ headerShown: false }} />
-          <Stack.Screen name="submitNewEvent" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </NativeBaseProvider>
+    <GlobalStateProvider>
+      <NativeBaseProvider theme={customTheme}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="adminDboard" options={{ headerShown: false }} />
+            <Stack.Screen name="tabs" options={{ headerShown: false }} />
+            <Stack.Screen name="userLogin" options={{ headerShown: false }} />
+            <Stack.Screen name="adminLogin" options={{ headerShown: false }} />
+            <Stack.Screen name="submitNewEvent" options={{ headerShown: false }} />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </NativeBaseProvider>
+    </GlobalStateProvider>
   );
 }
